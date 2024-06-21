@@ -1,23 +1,29 @@
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
-from selenium.webdriver.chrome.options import Options as ChromeOptions
+from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
+import time
 
-# Set up Chrome WebDriver
-chrome_options = ChromeOptions()
-chrome_options.add_argument('--headless')  # Run Chrome in headless mode, no GUI needed
-chrome_options.add_argument('--disable-gpu')  # Disable GPU acceleration
-service = ChromeService(executable_path='/path/to/chromedriver')
-driver = webdriver.Chrome(service=service, options=chrome_options)
+# Path to the geckodriver binary
+gecko_driver_path = '/usr/local/bin/geckodriver'  # Adjust if necessary
+
+# Set up the FirefoxDriver
+service = Service(gecko_driver_path)
+options = webdriver.FirefoxOptions()
+options.add_argument('--headless')
+
+driver = webdriver.Firefox(service=service, options=options)
 
 # Load the page
-driver.get('https://example.com')
+driver.get('https://www.facetofacegames.com/emrakul-the-world-anew-6-modern-horizons-3/')
+#driver.get('https://www.facetofacegames.com/the-one-ring-451-borderless-bundle-the-lord-of-the-rings-tales-of-middle-earth/')
 
 # Wait for the page to fully render (adjust timeout as needed)
-WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'selector-for-your-element')))
+WebDriverWait(driver, 10)
+
+time.sleep(3)
 
 # Get the page source after rendering
 page_source = driver.page_source
@@ -34,3 +40,4 @@ card_name = soup.find_all("h1", class_="productView-title")[0].contents[0]
 result = soup.find_all("div", class_="form-field--stock")[0]
 result = result.find("span").contents[0]
 res_as_int = int(result)
+print(res_as_int)
