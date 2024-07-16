@@ -1,29 +1,43 @@
-import requests
+from selenium import webdriver
+from selenium.webdriver.firefox.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
+import time
 
-def check_stocks():
-    #URL = "https://realpython.github.io/fake-jobs/"
-    # URL = "https://www.facetofacegames.com/the-one-ring-451-borderless-bundle-the-lord-of-the-rings-tales-of-middle-earth/"
-    URL = "https://www.facetofacegames.com/emrakul-the-world-anew-6-modern-horizons-3/"
-    page = requests.get(URL)
-    #print(page.text)
-    
-    soup = BeautifulSoup(page.content, "html.parser")
+# Path to the geckodriver binary
+gecko_driver_path = '/usr/local/bin/geckodriver'  # Adjust if necessary
 
+# Set up the FirefoxDriver
+service = Service(gecko_driver_path)
+options = webdriver.FirefoxOptions()
+options.add_argument('--headless')
 
-    # result = soup.find(id="data-product-stock")
-    # print(result)
+driver = webdriver.Firefox(service=service, options=options)
 
-    card_name = soup.find_all("h1", class_="productView-title")[0].contents[0]
-    # print(card_name)
+# Load the page
+driver.get('https://www.facetofacegames.com/emrakul-the-world-anew-6-modern-horizons-3/')
+#driver.get('https://www.facetofacegames.com/the-one-ring-451-borderless-bundle-the-lord-of-the-rings-tales-of-middle-earth/')
 
-    result = soup.find_all("div", class_="form-field--stock")[0]
-    result = result.find("span").contents[0]
-    res_as_int = int(result)
+# Wait for the page to fully render (adjust timeout as needed)
+WebDriverWait(driver, 10)
 
-    # print(res_as_int > 0)
+time.sleep(3)
 
+# Get the page source after rendering
+page_source = driver.page_source
 
+# Parse the page source with BeautifulSoup
+soup = BeautifulSoup(page_source, 'html.parser')
 
-if __name__ == "__main__":
-    check_stocks()
+# Close the WebDriver
+driver.quit()
+
+card_name = soup.find_all("h1", class_="productView-title")[0].contents[0]
+# print(card_name)
+
+result = soup.find_all("div", class_="form-field--stock")[0]
+result = result.find("span").contents[0]
+res_as_int = int(result)
+print(res_as_int)
