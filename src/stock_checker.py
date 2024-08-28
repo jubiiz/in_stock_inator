@@ -17,8 +17,11 @@ LINKS_TO_CHECK = [
 
 
 def main():
+    print("main")
     driver = get_web_driver()
+    print("soup")
     soup = get_soup_from_link(driver, "https://www.facetofacegames.com/emrakul-the-world-anew-6-modern-horizons-3/")
+    print("qtt")
     result = get_quantity_from_ftf_soup(soup)
     res_as_int = int(result)
     print(res_as_int)
@@ -27,8 +30,11 @@ def main():
 def get_web_driver() -> WebDriver:
     gecko_driver_path = '/usr/local/bin/geckodriver'  # Adjust if necessary
     service = Service(gecko_driver_path)
+    print("options")
     options = webdriver.FirefoxOptions()
-    options.add_argument('--headless')
+    print("firefox")
+    options.set_preference('profile', '/home/jubiiz/documents/code/in_stock_inator/firefox_setup/profile')  # Replace with the actual path
+    #options.add_argument('--headless')
     return webdriver.Firefox(service=service, options=options)
 
 
