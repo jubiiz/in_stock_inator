@@ -1,33 +1,39 @@
+import sys
+import importlib
+
 from selenium import webdriver
 from selenium.webdriver.firefox.service import Service
-from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
-from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from bs4 import BeautifulSoup
-import time
+
 
 #https://www.facetofacegames.com/emrakul-the-world-anew-6-modern-horizons-3/
 #https://www.facetofacegames.com/the-one-ring-451-borderless-bundle-the-lord-of-the-rings-tales-of-middle-earth/
 
-LINKS_TO_CHECK = [
+URLS_TO_CHECK = [
     "https://www.facetofacegames.com/emrakul-the-world-anew-6-modern-horizons-3/",
     "https://www.facetofacegames.com/the-one-ring-451-borderless-bundle-the-lord-of-the-rings-tales-of-middle-earth/",
 ]
 
 
+CHECKER_PATH = "/home/jubiiz/documents/code/in_stock_inator/availability_functions/ftf.py"
+
+
 def main():
-    driver = get_web_driver()
-    for url in LINKS_TO_CHECK:
-        result = ftf_availability(driver, url)
+    spec = importlib.util.spec_from_file_location("ftf", CHECKER_PATH)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules["ftf"] = module
+    spec.loader.exec_module(module)
+
+    checker = getattr(module, "ftf_availability")
+
+    for url in URLS_TO_CHECK:
+        driver = get_web_driver()
+        result = checker(driver, url)
         res_as_int = int(result)
         print(res_as_int)
 
 
-def ftf_availability(driver: WebDriver, url: str) -> int:
-    soup = get_soup_from_link(driver, url)
-    return get_quantity_from_ftf_soup(soup)
+
 
 
 def get_web_driver() -> WebDriver:
@@ -38,23 +44,6 @@ def get_web_driver() -> WebDriver:
     return webdriver.Firefox(service=service, options=options)
 
 
-def get_soup_from_link(driver: WebDriver, link: str) -> BeautifulSoup:
-    driver.get(link)
-    WebDriverWait(driver, 10)
-    time.sleep(3)
-    soup = BeautifulSoup(driver.page_source, 'html.parser')
-    driver.quit()
-    return soup
-
-
-def get_card_name_from_ftf_soup(soup: BeautifulSoup) -> str:
-    return soup.find_all("h1", class_="productView-title")[0].contents[0]
-
-
-def get_quantity_from_ftf_soup(soup: BeautifulSoup) -> int:
-    result = soup.find_all("div", class_="form-field--stock")[0]
-    result = result.find("span").contents[0]
-    return int(result)
 
 if __name__ == "__main__":
     main()
