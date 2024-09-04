@@ -1,5 +1,6 @@
 import sys
 import importlib
+from typing import Callable
 
 from selenium import webdriver
 from selenium.webdriver.firefox.service import Service
@@ -19,21 +20,13 @@ CHECKER_PATH = "/home/jubiiz/documents/code/in_stock_inator/availability_functio
 
 
 def main():
-    spec = importlib.util.spec_from_file_location("ftf", CHECKER_PATH)
-    module = importlib.util.module_from_spec(spec)
-    sys.modules["ftf"] = module
-    spec.loader.exec_module(module)
-
-    checker = getattr(module, "ftf_availability")
+    checker = import_checker(CHECKER_PATH, "ftf", "ftf_availability")
 
     for url in URLS_TO_CHECK:
         driver = get_web_driver()
         result = checker(driver, url)
         res_as_int = int(result)
         print(res_as_int)
-
-
-
 
 
 def get_web_driver() -> WebDriver:
@@ -44,6 +37,12 @@ def get_web_driver() -> WebDriver:
     return webdriver.Firefox(service=service, options=options)
 
 
+def import_checker(path_to_file: str, module_name: str, function_name: str) -> Callable:
+    spec = importlib.util.spec_from_file_location(module_name, path_to_file)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules["ftf"] = module
+    spec.loader.exec_module(module)
+    return getattr(module, function_name)
 
 if __name__ == "__main__":
     main()
