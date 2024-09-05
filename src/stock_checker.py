@@ -1,5 +1,6 @@
-import sys
 import importlib
+import json
+import sys
 from typing import Callable
 
 from selenium import webdriver
@@ -7,26 +8,29 @@ from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.remote.webdriver import WebDriver
 
 
-#https://www.facetofacegames.com/emrakul-the-world-anew-6-modern-horizons-3/
-#https://www.facetofacegames.com/the-one-ring-451-borderless-bundle-the-lord-of-the-rings-tales-of-middle-earth/
-
-URLS_TO_CHECK = [
-    "https://www.facetofacegames.com/emrakul-the-world-anew-6-modern-horizons-3/",
-    "https://www.facetofacegames.com/the-one-ring-451-borderless-bundle-the-lord-of-the-rings-tales-of-middle-earth/",
-]
-
-
-CHECKER_PATH = "/home/jubiiz/documents/code/in_stock_inator/availability_functions/ftf.py"
+SHOPPING_LIST_PATH = "/home/jubiiz/documents/code/in_stock_inator/shopping_lists/my_shopping_list.json"
 
 
 def main():
-    checker = import_checker(CHECKER_PATH, "ftf", "ftf_availability")
+    groups = get_shopping_list_groups(SHOPPING_LIST_PATH)
 
-    for url in URLS_TO_CHECK:
-        driver = get_web_driver()
-        result = checker(driver, url)
-        res_as_int = int(result)
-        print(res_as_int)
+    for group in groups:
+        availability_function_path_to_file = group['availabilityFunction']["pathToFile"]
+        availability_function_module_name = group['availabilityFunction']["moduleName"]
+        availability_function_name = group['availabilityFunction']["functionName"]
+        availability_function = import_availability_function(
+                availability_function_path_to_file,
+                availability_function_module_name,
+                availability_function_name
+            )
+
+        alerting_function = group['alertingFunction']
+        for item in group['items']:
+            url = item["url"]
+            driver = get_web_driver()
+            result = availability_function(driver, url)
+            res_as_int = int(result)
+            print(res_as_int)
 
 
 def get_web_driver() -> WebDriver:
@@ -37,12 +41,19 @@ def get_web_driver() -> WebDriver:
     return webdriver.Firefox(service=service, options=options)
 
 
-def import_checker(path_to_file: str, module_name: str, function_name: str) -> Callable:
+def import_availability_function(path_to_file: str, module_name: str, function_name: str) -> Callable:
     spec = importlib.util.spec_from_file_location(module_name, path_to_file)
     module = importlib.util.module_from_spec(spec)
-    sys.modules["ftf"] = module
+    sys.modules[module_name] = module
     spec.loader.exec_module(module)
     return getattr(module, function_name)
+
+
+def get_shopping_list_groups(path_to_shopping_list: str):
+    with open(path_to_shopping_list, "r") as f:
+        groups = json.loads(f.read())["groups"]
+    return groups
+
 
 if __name__ == "__main__":
     main()
