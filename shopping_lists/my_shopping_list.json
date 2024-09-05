@@ -1,0 +1,37 @@
+{
+  "groups": [
+    {
+     "availabilityFunction": {
+        "pathToFile": "/home/jubiiz/documents/code/in_stock_inator/availability_functions/ftf.py",
+        "moduleName": "ftf",
+        "functionName": "ftf_availability"
+     },
+      "alertingFunction": {
+        "pathToFile": "/home/jubiiz/documents/code/in_stock_inator/availability_functions/ftf.py",
+        "moduleName": "ftf",
+        "functionName": "not_here_yet"
+     },
+     "items": [
+        {"url": "https://www.facetofacegames.com/emrakul-the-world-anew-6-modern-horizons-3/"},
+        {"url": "https://www.facetofacegames.com/the-one-ring-451-borderless-bundle-the-lord-of-the-rings-tales-of-middle-earth/"}
+      ]
+    },
+    {
+    "availabilityFunction": {
+        "pathToFile": "/home/jubiiz/documents/code/in_stock_inator/availability_functions/ftf.py",
+        "moduleName": "ftf",
+        "functionName": "ftf_just_say_hi"
+     },
+      "alertingFunction": {
+        "pathToFile": "/home/jubiiz/documents/code/in_stock_inator/availability_functions/ftf.py",
+        "moduleName": "ftf",
+        "functionName": "not_here_yet"
+     },
+    "items": [
+        {"url": "https://www.facetofacegames.com/emrakul-the-world-anew-6-modern-horizons-3/"},
+        {"url": "https://www.facetofacegames.com/the-one-ring-451-borderless-bundle-the-lord-of-the-rings-tales-of-middle-earth/"}
+      ]
+    }
+
+  ]
+}
