@@ -8,6 +8,7 @@ def ftf_availability(driver: WebDriver, url: str) -> int:
     soup = get_soup_from_link(driver, url)
     return get_quantity_from_ftf_soup(soup)
 
+
 def ftf_just_say_hi(driver: WebDriver, url: str) -> int:
     print(f"I JUST REALLY WANTED TO SAY HI FOR THIS URL: {url}")
     return 0
@@ -17,7 +18,7 @@ def get_soup_from_link(driver: WebDriver, link: str) -> BeautifulSoup:
     driver.get(link)
     WebDriverWait(driver, 10)
     time.sleep(3)
-    soup = BeautifulSoup(driver.page_source, 'html.parser')
+    soup = BeautifulSoup(driver.page_source, "html.parser")
     driver.quit()
     return soup
 

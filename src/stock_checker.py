@@ -8,24 +8,26 @@ from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.remote.webdriver import WebDriver
 
 
-SHOPPING_LIST_PATH = "/home/jubiiz/documents/code/in_stock_inator/shopping_lists/my_shopping_list.json"
+SHOPPING_LIST_PATH = (
+    "/home/jubiiz/documents/code/in_stock_inator/shopping_lists/my_shopping_list.json"
+)
 
 
 def main():
     groups = get_shopping_list_groups(SHOPPING_LIST_PATH)
 
     for group in groups:
-        availability_function_path_to_file = group['availabilityFunction']["pathToFile"]
-        availability_function_module_name = group['availabilityFunction']["moduleName"]
-        availability_function_name = group['availabilityFunction']["functionName"]
+        availability_function_path_to_file = group["availabilityFunction"]["pathToFile"]
+        availability_function_module_name = group["availabilityFunction"]["moduleName"]
+        availability_function_name = group["availabilityFunction"]["functionName"]
         availability_function = import_availability_function(
-                availability_function_path_to_file,
-                availability_function_module_name,
-                availability_function_name
-            )
+            availability_function_path_to_file,
+            availability_function_module_name,
+            availability_function_name,
+        )
 
-        alerting_function = group['alertingFunction']
-        for item in group['items']:
+        alerting_function = group["alertingFunction"]
+        for item in group["items"]:
             url = item["url"]
             driver = get_web_driver()
             result = availability_function(driver, url)
@@ -34,14 +36,16 @@ def main():
 
 
 def get_web_driver() -> WebDriver:
-    gecko_driver_path = '/usr/local/bin/geckodriver'  # Adjust if necessary
+    gecko_driver_path = "/usr/local/bin/geckodriver"  # Adjust if necessary
     service = Service(gecko_driver_path)
     options = webdriver.FirefoxOptions()
-    options.add_argument('--headless')
+    options.add_argument("--headless")
     return webdriver.Firefox(service=service, options=options)
 
 
-def import_availability_function(path_to_file: str, module_name: str, function_name: str) -> Callable:
+def import_availability_function(
+    path_to_file: str, module_name: str, function_name: str
+) -> Callable:
     spec = importlib.util.spec_from_file_location(module_name, path_to_file)
     module = importlib.util.module_from_spec(spec)
     sys.modules[module_name] = module
@@ -57,4 +61,3 @@ def get_shopping_list_groups(path_to_shopping_list: str):
 
 if __name__ == "__main__":
     main()
-
