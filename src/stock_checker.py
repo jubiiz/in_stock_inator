@@ -25,7 +25,7 @@ def main():
             availability_function_name,
         )
 
-        alerting_function = group["alertingFunction"]
+        # alerting_function = group["alertingFunction"]
         for item in group["items"]:
             url = item["url"]
             driver = get_web_driver()
