@@ -7,7 +7,6 @@ from selenium import webdriver
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.remote.webdriver import WebDriver
 
-
 SHOPPING_LIST_PATH = (
     "/home/jubiiz/documents/code/in_stock_inator/shopping_lists/my_shopping_list.json"
 )

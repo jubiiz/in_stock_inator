@@ -1,7 +1,8 @@
+import time
+
+from bs4 import BeautifulSoup
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.ui import WebDriverWait
-from bs4 import BeautifulSoup
-import time
 
 
 def ftf_availability(driver: WebDriver, url: str) -> int:
