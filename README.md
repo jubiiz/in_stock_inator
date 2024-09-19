@@ -55,6 +55,8 @@ This is a configuration file located in `./shopping_lists/`. It specifies
 a list of target products to check for availability. For each product, 
 a corresponding [availability function](#creating-an-availability-function) will check if the product is in stock, pass that result to an [alerting function](#creating-an-alerting-function), which will decide how to alert the user. 
 
+For more information, see the [shopping list documentation page](./doc/shopping_list.md)
+
 ### Running the Checks
 The items can be checked for availability by running the main file: 
 ``` bash
@@ -72,5 +74,14 @@ Automating the run of the checker can allow you to keep it running on the side, 
 
 ```cron
 0/15 * * * * python3 absolute_path_to/in_stock_inator/src/stock_checker.py
+```
+
+### Formatting, Linting
+This project uses the [black formatter](https://black.readthedocs.io/en/stable/index.html), [isort](https://pycqa.github.io/isort/) and [flake8](https://flake8.pycqa.org/en/latest/) for formatting and linting. To format and lint the code, simply run: 
+
+```bash
+black .
+isort .
+flake8 .
 ```
 
