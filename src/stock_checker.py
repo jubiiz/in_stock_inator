@@ -19,19 +19,26 @@ def main():
         availability_function_path_to_file = group["availabilityFunction"]["pathToFile"]
         availability_function_module_name = group["availabilityFunction"]["moduleName"]
         availability_function_name = group["availabilityFunction"]["functionName"]
-        availability_function = import_availability_function(
+        availability_function = import_custom_function(
             availability_function_path_to_file,
             availability_function_module_name,
             availability_function_name,
         )
 
-        # alerting_function = group["alertingFunction"]
+        alerting_function_path_to_file = group["alertingFunction"]["pathToFile"]
+        alerting_function_module_name = group["alertingFunction"]["moduleName"]
+        alerting_function_name = group["alertingFunction"]["functionName"]
+        alerting_function = import_custom_function(
+            alerting_function_path_to_file,
+            alerting_function_module_name ,
+            alerting_function_name ,
+        )
+
         for item in group["items"]:
             url = item["url"]
             driver = get_web_driver()
             result = availability_function(driver, url)
-            res_as_int = int(result)
-            print(res_as_int)
+            alerting_function(result)
 
 
 def get_web_driver() -> WebDriver:
@@ -42,7 +49,7 @@ def get_web_driver() -> WebDriver:
     return webdriver.Firefox(service=service, options=options)
 
 
-def import_availability_function(
+def import_custom_function(
     path_to_file: str, module_name: str, function_name: str
 ) -> Callable:
     spec = importlib.util.spec_from_file_location(module_name, path_to_file)
