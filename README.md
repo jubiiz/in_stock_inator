@@ -61,5 +61,16 @@ The items can be checked for availability by running the main file:
 python3 src/stock_checker.py
 ```
 
-It will go through every
+For each item in the shopping list, it will:
+1. Call the associated **availability function**, passing the **URL** and a **webdriver**.
+2. Pass the result of the **availability function** to the associated **alerting function**.
+
+### Automation
+Again, we stress the importance of not running the checker too often to avoid putting unecessary strain on websites. 
+
+Automating the run of the checker can allow you to keep it running on the side, and get alerted when the checker finds your product is in stock. One way to automate the checker is by using [crontab](https://linuxhandbook.com/crontab/) in UNIX. Here is a sample crontab entry to run the checker every 15 minutes:
+
+```cron
+0/15 * * * * python3 absolute_path_to/in_stock_inator/src/stock_checker.py
+```
 
