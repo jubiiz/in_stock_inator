@@ -13,6 +13,13 @@ SHOPPING_LIST_PATH = (
 
 
 def main():
+    """Entrypoint of the checker
+
+    Parses the shopping list. For every group, it extracts the availability and 
+    alerting functions. For each item in each group, it runs the availability
+    function on the provided target url, and passes the result to the alerting 
+    function.    
+    """
     groups = get_shopping_list_groups(SHOPPING_LIST_PATH)
 
     for group in groups:
@@ -42,6 +49,7 @@ def main():
 
 
 def get_web_driver() -> WebDriver:
+    """Returns an instance of a Selenium web driver."""
     gecko_driver_path = "/usr/local/bin/geckodriver"  # Adjust if necessary
     service = Service(gecko_driver_path)
     options = webdriver.FirefoxOptions()
@@ -52,6 +60,7 @@ def get_web_driver() -> WebDriver:
 def import_custom_function(
     path_to_file: str, module_name: str, function_name: str
 ) -> Callable:
+    """Imports a function from its filename and name."""
     spec = importlib.util.spec_from_file_location(module_name, path_to_file)
     module = importlib.util.module_from_spec(spec)
     sys.modules[module_name] = module
@@ -59,7 +68,8 @@ def import_custom_function(
     return getattr(module, function_name)
 
 
-def get_shopping_list_groups(path_to_shopping_list: str):
+def get_shopping_list_groups(path_to_shopping_list: str) -> list[dict]:
+    """Extracts the groups from the shopping list file as dictionaries."""
     with open(path_to_shopping_list, "r") as f:
         groups = json.loads(f.read())["groups"]
     return groups
