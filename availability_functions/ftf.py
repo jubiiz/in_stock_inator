@@ -15,8 +15,8 @@ def ftf_just_say_hi(driver: WebDriver, url: str) -> int:
     return 0
 
 
-def get_soup_from_link(driver: WebDriver, link: str) -> BeautifulSoup:
-    driver.get(link)
+def get_soup_from_link(driver: WebDriver, url: str) -> BeautifulSoup:
+    driver.get(url)
     WebDriverWait(driver, 10)
     time.sleep(3)
     soup = BeautifulSoup(driver.page_source, "html.parser")
