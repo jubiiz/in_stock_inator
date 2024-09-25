@@ -2,9 +2,9 @@
   "groups": [
     {
      "availabilityFunction": {
-        "pathToFile": "/home/jubiiz/documents/code/in_stock_inator/availability_functions/ftf.py",
-        "moduleName": "ftf",
-        "functionName": "ftf_availability"
+        "pathToFile": "/home/jubiiz/documents/code/in_stock_inator/availability_functions/vsb.py",
+        "moduleName": "vsb",
+        "functionName": "vsb_course_availability"
      },
      "alertingFunction": {
         "pathToFile": "/home/jubiiz/documents/code/in_stock_inator/alerting_functions/console.py",
@@ -12,24 +12,11 @@
         "functionName": "print_result"
      },
      "items": [
-        {"url": "https://www.facetofacegames.com/emrakul-the-world-anew-6-modern-horizons-3/"},
-        {"url": "https://www.facetofacegames.com/the-one-ring-451-borderless-bundle-the-lord-of-the-rings-tales-of-middle-earth/"}
-      ]
-    },
-    {
-     "availabilityFunction": {
-        "pathToFile": "/home/jubiiz/documents/code/in_stock_inator/availability_functions/ftf.py",
-        "moduleName": "ftf",
-        "functionName": "ftf_just_say_hi"
-     },
-     "alertingFunction": {
-        "pathToFile": "/home/jubiiz/documents/code/in_stock_inator/alerting_functions/console.py",
-        "moduleName": "console",
-        "functionName": "print_result"
-     },
-     "items": [
-        {"url": "https://www.facetofacegames.com/emrakul-the-world-anew-6-modern-horizons-3/"},
-        {"url": "https://www.facetofacegames.com/the-one-ring-451-borderless-bundle-the-lord-of-the-rings-tales-of-middle-earth/"}
+        {
+            "url": "https://vsb.mcgill.ca/vsb/criteria.jsp?access=0&lang=en&tip=1&page=results&scratch=0&term=202401&sort=none&filters=iiiiiiiii&bbs=&ds=&cams=Distance_Downtown_Macdonald_Off-Campus&locs=any&isrts=",
+            "semester": "Fall 2024",
+            "section": "Lec 001"
+        }
       ]
     }
 

@@ -15,10 +15,7 @@ SHOPPING_LIST_PATH = (
 def main():
     """Entrypoint of the checker
 
-    Parses the shopping list. For every group, it extracts the availability and 
-    alerting functions. For each item in each group, it runs the availability
-    function on the provided target url, and passes the result to the alerting 
-    function.    
+    Parses the shopping list. Reports on the availability of each item.
     """
     groups = get_shopping_list_groups(SHOPPING_LIST_PATH)
 
@@ -37,23 +34,22 @@ def main():
         alerting_function_name = group["alertingFunction"]["functionName"]
         alerting_function = import_custom_function(
             alerting_function_path_to_file,
-            alerting_function_module_name ,
-            alerting_function_name ,
+            alerting_function_module_name,
+            alerting_function_name,
         )
 
         for item in group["items"]:
-            url = item["url"]
             driver = get_web_driver()
-            result = availability_function(driver, url)
+            result = availability_function(driver, item)
             alerting_function(result)
 
 
 def get_web_driver() -> WebDriver:
     """Returns an instance of a Selenium web driver."""
-    gecko_driver_path = "/usr/local/bin/geckodriver"  # Adjust if necessary
+    gecko_driver_path = "/usr/local/bin/geckodriver"
     service = Service(gecko_driver_path)
     options = webdriver.FirefoxOptions()
-    #options.add_argument("--headless")
+    options.add_argument("--headless")
     return webdriver.Firefox(service=service, options=options)
 
 
@@ -76,20 +72,4 @@ def get_shopping_list_groups(path_to_shopping_list: str) -> list[dict]:
 
 
 if __name__ == "__main__":
-    #main()
-    import sys    
-    print("In module products sys.path[0], __package__ ==", sys.path[0], __package__)
-    import os
-    import sys
-
-    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-
-    from availability_functions.vsb import vsb_course_availability
-    from alerting_functions.console import print_result
-
-    url = "https://vsb.mcgill.ca/vsb/criteria.jsp?access=0&lang=en&tip=1&page=results&scratch=0&term=202401&sort=none&filters=iiiiiiiii&bbs=&ds=&cams=Distance_Downtown_Macdonald_Off-Campus&locs=any&isrts="
-    driver = get_web_driver()
-    result = vsb_course_availability(driver, url)
-    print_result(result)
-
+    main()
